@@ -102,3 +102,23 @@ svg#links{
     justify-content: flex-start;
   }
 }
+
+/* Visibility helpers */
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+/* Mobile: hide desktop UI, show mobile UI */
+@media (max-width: 900px){
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+
+  .wrap{
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  main{
+    height: calc(100vh - 56px - 8px); /* header + padding */
+  }
+}

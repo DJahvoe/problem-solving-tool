@@ -50,6 +50,7 @@ function resetAll(){
 /***********************
  * Wire UI buttons
  ***********************/
+// Desktop wiring
 dom.btnAddChild.addEventListener("click", () => addChild(state.selectedId));
 dom.btnAddSibling.addEventListener("click", () => addSibling(state.selectedId));
 dom.btnEdit.addEventListener("click", editSelected);
@@ -70,6 +71,48 @@ dom.nodeTitle.addEventListener("keydown", (e) => {
     saveSelectedFromPanel();
   }
 });
+
+// Mobile wiring (safe-guard: elements exist only on mobile UI)
+if(dom.mAdd) dom.mAdd.addEventListener("click", () => addChild(state.selectedId));
+if(dom.mEdit) dom.mEdit.addEventListener("click", editSelected);
+if(dom.mAuto) dom.mAuto.addEventListener("click", autoLayout);
+if(dom.mCenter) dom.mCenter.addEventListener("click", centerView);
+if(dom.mDelete) dom.mDelete.addEventListener("click", () => deleteNode(state.selectedId));
+
+if(dom.mSave) dom.mSave.addEventListener("click", saveSelectedFromPanel);
+
+if(dom.mPanel) dom.mPanel.addEventListener("click", () => {
+  document.body.classList.toggle("panel-open");
+});
+
+// Mobile export/import uses mobile json box (but reuses same logic)
+if(dom.mExport) dom.mExport.addEventListener("click", () => {
+  const payload = { version: 1, rootId: state.rootId, selectedId: state.selectedId, view: state.view, nodes: state.nodes };
+  dom.mJsonBox.value = JSON.stringify(payload, null, 2);
+  toast("Exported");
+});
+
+if(dom.mImport) dom.mImport.addEventListener("click", () => {
+  const txt = dom.mJsonBox.value.trim();
+  if(!txt){ toast("Paste JSON first"); return; }
+  try{
+    const obj = JSON.parse(txt);
+    if(!obj || !obj.nodes || !obj.rootId) throw new Error("Invalid format");
+    state = {
+      nodes: obj.nodes,
+      rootId: obj.rootId,
+      selectedId: obj.selectedId || obj.rootId,
+      view: obj.view || { x: 80, y: 80, scale: 1 }
+    };
+    saveLocal();
+    render();
+    toast("Imported");
+  }catch(err){
+    console.error(err);
+    toast("Import failed");
+  }
+});
+
 
 /***********************
  * Init

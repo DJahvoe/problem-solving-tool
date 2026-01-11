@@ -37,10 +37,16 @@ function syncPanel(){
   if(!n){
     dom.nodeTitle.value = "";
     dom.nodeNotes.value = "";
+    if(dom.mNodeTitle) dom.mNodeTitle.value = "";
+    if(dom.mNodeNotes) dom.mNodeNotes.value = "";
     return;
   }
+
   dom.nodeTitle.value = n.title || "";
   dom.nodeNotes.value = n.notes || "";
+
+  if(dom.mNodeTitle) dom.mNodeTitle.value = n.title || "";
+  if(dom.mNodeNotes) dom.mNodeNotes.value = n.notes || "";
 }
 
 function render(){

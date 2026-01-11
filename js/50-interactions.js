@@ -87,8 +87,14 @@ function editSelected(){
 function saveSelectedFromPanel(){
   const n = getNode(state.selectedId);
   if(!n) return;
-  n.title = dom.nodeTitle.value.trim() || "Untitled";
-  n.notes = dom.nodeNotes.value;
+
+  // If mobile inputs exist, use them (mobile-only UI)
+  const titleEl = dom.mNodeTitle || dom.nodeTitle;
+  const notesEl = dom.mNodeNotes || dom.nodeNotes;
+
+  n.title = titleEl.value.trim() || "Untitled";
+  n.notes = notesEl.value;
+
   saveLocal();
   render();
   toast("Saved");

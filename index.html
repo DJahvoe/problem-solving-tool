@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="toolbar">
+    <div class="toolbar desktop-only">
       <button class="primary" id="btnAddChild">+ Child <span class="kbd">Enter</span></button>
       <button id="btnAddSibling">+ Sibling <span class="kbd">Tab</span></button>
       <button id="btnEdit">Edit <span class="kbd">E</span></button>
@@ -38,7 +38,7 @@
   </header>
 
   <div class="wrap">
-    <aside>
+    <aside class="desktop-only" id="sidebar">
       <div class="panelTitle">Selected node</div>
 
       <div class="field">
@@ -96,6 +96,51 @@
       </div>
     </main>
   </div>
+
+  <!-- Mobile bottom bar -->
+  <div class="mobile-bar mobile-only" id="mobileBar">
+    <button class="primary" id="mAdd">+ Child</button>
+    <button id="mEdit">Edit</button>
+    <button id="mAuto">Layout</button>
+    <button id="mPanel">Panel</button>
+  </div>
+
+  <!-- Mobile panel (bottom sheet) -->
+  <div class="mobile-panel mobile-only" id="mobilePanel">
+    <div class="mp-handle"></div>
+
+    <div class="panelTitle">Selected node</div>
+
+    <div class="field">
+      <label>Title</label>
+      <input id="mNodeTitle" type="text" placeholder="Title" />
+    </div>
+
+    <div class="field">
+      <label>Notes</label>
+      <textarea id="mNodeNotes" placeholder="Notes"></textarea>
+    </div>
+
+    <div class="row">
+      <button class="primary" id="mSave">Save</button>
+      <button id="mCenter">Center</button>
+      <button class="danger" id="mDelete">Delete</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <button id="mExport">Export</button>
+      <button id="mImport">Import</button>
+    </div>
+
+    <div class="field">
+      <label>JSON</label>
+      <textarea id="mJsonBox" placeholder="Export appears here. Paste JSON to import."></textarea>
+    </div>
+  </div>
+
+
 
   <div class="toast" id="toast"></div>
 

@@ -210,3 +210,62 @@ input:focus, textarea:focus{
   button, .ghost{ padding: 10px 10px; }
   .kbd{ display:none; } /* less clutter on small screens */
 }
+
+/* Mobile bottom bar */
+.mobile-bar{
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 60;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 16px;
+  background: rgba(9,14,30,.78);
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+.mobile-bar button{
+  flex: 1;
+  justify-content: center;
+  padding: 12px 10px;
+}
+
+/* Mobile panel (bottom sheet) */
+.mobile-panel{
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: 72px; /* sits above mobile bar */
+  max-height: 55vh;
+  z-index: 60;
+
+  padding: 12px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(17,24,51,.92), rgba(15,22,48,.88));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: var(--shadow);
+  overflow: auto;
+
+  transform: translateY(calc(100% + 76px));
+  transition: transform .18s ease;
+}
+
+body.panel-open .mobile-panel{
+  transform: translateY(0);
+}
+
+.mp-handle{
+  width: 48px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  margin: 4px auto 10px;
+}
+
+/* On mobile: less visual clutter */
+@media (max-width: 900px){
+  .node{ width: 190px; }
+  .kbd{ display:none; }
+}
