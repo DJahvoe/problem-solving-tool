@@ -126,6 +126,26 @@ if(dom.mImport) dom.mImport.addEventListener("click", () => {
   }
 });
 
+if(dom.nodeColor){
+  dom.nodeColor.addEventListener("input", () => {
+    const n = getNode(state.selectedId);
+    if(!n) return;
+    n.color = dom.nodeColor.value;
+    saveLocal();
+    render();
+  });
+}
+
+if(dom.mNodeColor){
+  dom.mNodeColor.addEventListener("input", () => {
+    const n = getNode(state.selectedId);
+    if(!n) return;
+    n.color = dom.mNodeColor.value;
+    saveLocal();
+    render();
+  });
+}
+
 
 window.addEventListener("resize", () => {
   // Keep current node visible after breakpoint changes

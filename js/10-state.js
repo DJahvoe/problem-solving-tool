@@ -24,6 +24,7 @@ function createInitial(){
     parentId: null,
     title: "Root issue (edit me)",
     notes: "",
+    color: "#121b3d",
     children: [],
     x: 200, y: 140,
     manual: false

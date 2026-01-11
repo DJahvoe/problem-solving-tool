@@ -37,16 +37,21 @@ function syncPanel(){
   if(!n){
     dom.nodeTitle.value = "";
     dom.nodeNotes.value = "";
+    if(dom.nodeColor) dom.nodeColor.value = "#121b3d";
+
     if(dom.mNodeTitle) dom.mNodeTitle.value = "";
     if(dom.mNodeNotes) dom.mNodeNotes.value = "";
+    if(dom.mNodeColor) dom.mNodeColor.value = "#121b3d";
     return;
   }
 
   dom.nodeTitle.value = n.title || "";
   dom.nodeNotes.value = n.notes || "";
+  if(dom.nodeColor) dom.nodeColor.value = n.color || "#121b3d";
 
   if(dom.mNodeTitle) dom.mNodeTitle.value = n.title || "";
   if(dom.mNodeNotes) dom.mNodeNotes.value = n.notes || "";
+  if(dom.mNodeColor) dom.mNodeColor.value = n.color || "#121b3d";
 }
 
 function render(){
@@ -62,6 +67,9 @@ function render(){
     el.style.left = n.x + "px";
     el.style.top = n.y + "px";
     el.dataset.id = id;
+
+    // Apply node color if present
+    if (n.color) el.style.background = n.color;
 
     const d = depthOf(id);
 

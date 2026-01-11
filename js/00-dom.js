@@ -22,6 +22,7 @@ const dom = {
     btnExport: document.getElementById("btnExport"),
     btnImport: document.getElementById("btnImport"),
     btnPanel: document.getElementById("btnPanel"),
+    nodeColor: document.getElementById("nodeColor"),
 
     // mobile UI
     mAddChild: document.getElementById("mAddChild"),
@@ -38,5 +39,7 @@ const dom = {
     mExport: document.getElementById("mExport"),
     mImport: document.getElementById("mImport"),
     mJsonBox: document.getElementById("mJsonBox"),
+    
+    mNodeColor: document.getElementById("mNodeColor"),
 
 };

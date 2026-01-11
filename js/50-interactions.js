@@ -18,6 +18,7 @@ function addChild(parentId){
     parentId,
     title: "New node",
     notes: "",
+    color: parent.color || "#121b3d",   // ✅ inherit parent color (or default)
     children: [],
     x: parent.x + 300,
     y: parent.y + (parent.children.length * 120),
@@ -88,14 +89,31 @@ function editSelected(){
 
 function saveSelectedFromPanel(){
   const n = getNode(state.selectedId);
+  let oldTitleEl = n.title;
+  let oldNotesEl = n.notes;
+  console.log(n);
   if(!n) return;
 
-  // If mobile inputs exist, use them (mobile-only UI)
-  const titleEl = dom.mNodeTitle || dom.nodeTitle;
-  const notesEl = dom.mNodeNotes || dom.nodeNotes;
+  // Desktop vs Mobile inputs (use whichever exists)
+  let titleEl = null;
+  if(oldTitleEl !== dom.mNodeTitle) titleEl = dom.mNodeTitle;
+  if(oldTitleEl !== dom.nodeTitle) titleEl = dom.nodeTitle;
 
-  n.title = titleEl.value.trim() || "Untitled";
-  n.notes = notesEl.value;
+  let notesEl = null;
+  if(oldNotesEl !== dom.mNodeNotes) notesEl = dom.mNodeNotes;
+  if(oldNotesEl !== dom.nodeNotes) notesEl = dom.nodeNotes;
+
+  // Color inputs
+  const colorEl = dom.mNodeColor || dom.nodeColor;
+
+  n.title = titleEl?.value?.trim() || "Untitled";
+  if(notesEl) n.notes = notesEl.value;
+
+  if(colorEl && typeof colorEl.value === "string" && colorEl.value.trim()){
+    n.color = colorEl.value.trim();
+  } else if(!n.color){
+    n.color = "#121b3d";
+  }
 
   saveLocal();
   render();
