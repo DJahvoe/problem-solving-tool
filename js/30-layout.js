@@ -23,7 +23,7 @@ function computeTreeDepth(){
 
 /**
  * Simple tidy tree: compute y by leaf ordering, x by depth.
- * Preserves manual nodes; only layouts non-manual nodes.
+ * Reset manual nodes; layouts all nodes.
  */
 function autoLayout(){
   if(!state.rootId) return;
@@ -56,10 +56,10 @@ function autoLayout(){
   for(const id of Object.keys(state.nodes)){
     const n = getNode(id);
     if(!n) continue;
-    if(n.manual) continue;
     const d = depthOf(id);
     n.x = 160 + d * levelGap;
     n.y = 120 + (yMap.get(id) - minY);
+    n.manual = false;
   }
 
   saveLocal();
