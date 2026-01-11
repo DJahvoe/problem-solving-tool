@@ -235,6 +235,8 @@ input:focus, textarea:focus{
 /* Mobile panel (bottom sheet) */
 .mobile-panel{
   position: fixed;
+  gap: 5px;
+  flex-direction: column;
   left: 10px;
   right: 10px;
   bottom: 72px; /* sits above mobile bar */
@@ -253,7 +255,11 @@ input:focus, textarea:focus{
 }
 
 body.panel-open .mobile-panel{
-  transform: translateY(0);
+  transform: translateY(-15px);
+}
+
+#mSave, #mDelete {
+    flex: 1;
 }
 
 .mp-handle{

@@ -39,7 +39,7 @@ function importJSON(){
 function resetAll(){
   if(!confirm("Delete all nodes?")) return;
 
-  
+
   localStorage.removeItem(STORAGE_KEY);
   state = { nodes:{}, rootId:null, selectedId:null, view:{x:80,y:80,scale:1} };
   createInitial();
@@ -126,6 +126,11 @@ if(dom.mImport) dom.mImport.addEventListener("click", () => {
   }
 });
 
+
+window.addEventListener("resize", () => {
+  // Keep current node visible after breakpoint changes
+  centerView({ animate: true });
+});
 
 /***********************
  * Init

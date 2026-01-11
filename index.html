@@ -32,7 +32,7 @@
       <button id="btnPanel" class="ghost">Panel</button>
     </div>
 
-    <div class="hint">
+    <div class="hint desktop-only">
       Pan: drag background • Zoom: mousewheel • Drag node: reposition
     </div>
   </header>
@@ -108,9 +108,11 @@
 
   <!-- Mobile panel (bottom sheet) -->
   <div class="mobile-panel mobile-only" id="mobilePanel">
-    <div class="mp-handle"></div>
-
-    <div class="panelTitle">Selected node</div>
+    
+    <div>
+      <div class="mp-handle"></div>
+      <div class="panelTitle">Selected node</div>
+    </div>
 
     <div class="field">
       <label>Title</label>
@@ -128,7 +130,6 @@
       <button class="danger" id="mDelete">Delete</button>
     </div>
 
-    <div class="divider"></div>
 
     <div class="row">
       <button id="mExport">Export</button>

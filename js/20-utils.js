@@ -15,3 +15,14 @@ function escapeHtml(str){
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
 }
+
+function isMobileLayout(){
+  // keep consistent with your CSS breakpoint
+  return window.matchMedia("(max-width: 900px)").matches;
+}
+
+function getTargetCenterScale(){
+  // tune these numbers if you want bigger/smaller nodes
+  return isMobileLayout() ? 0.85 : 1.0;
+}
+

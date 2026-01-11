@@ -47,7 +47,7 @@ function addSibling(nodeId){
 
 function deleteNode(nodeId){
   if(!confirm("Delete Node?")) return;
-  
+
   const node = getNode(nodeId);
   if(!node) return;
   if(nodeId === state.rootId){
@@ -110,16 +110,41 @@ function clearManualPos(){
   toast("Manual cleared");
 }
 
-function centerView(){
+function centerView({ animate = false } = {}){
   const n = getNode(state.selectedId || state.rootId);
   if(!n) return;
+
   const viewportW = dom.canvas.clientWidth;
   const viewportH = dom.canvas.clientHeight;
-  const targetX = viewportW/2 - (n.x + 110) * state.view.scale;
-  const targetY = viewportH/2 - (n.y + 40) * state.view.scale;
+
+  // Scale target depends on device layout
+  const newScale = getTargetCenterScale();
+
+  // If mobile bottom bar exists, it covers content.
+  // Add a small upward offset so the node isn't hidden behind the bar/panel.
+  const mobileYOffsetPx = isMobileLayout() ? 70 : 0; // tweak if your bar height changes
+
+  // Node center (approx)
+  const nodeCenterX = n.x + 110;
+  const nodeCenterY = n.y + 40;
+
+  // Compute translation to place node at center (with mobile y offset)
+  const targetX = (viewportW / 2) - (nodeCenterX * newScale);
+  const targetY = (viewportH / 2 - mobileYOffsetPx) - (nodeCenterY * newScale);
+
+  state.view.scale = newScale;
   state.view.x = targetX;
   state.view.y = targetY;
-  applyView();
+
+  // Optional small animation (no dependencies)
+  if(animate){
+    dom.world.style.transition = "transform 120ms ease";
+    applyView();
+    setTimeout(() => { dom.world.style.transition = ""; }, 140);
+  } else {
+    applyView();
+  }
+
   saveLocal();
   toast("Centered");
 }
