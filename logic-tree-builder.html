@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Logic Tree Builder</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#111833;
+      --panel2:#0f1630;
+      --text:#e9eeff;
+      --muted:#aab3d6;
+      --accent:#7aa2ff;
+      --accent2:#7affc2;
+      --danger:#ff6b7a;
+      --line:#2a3566;
+      --node:#121b3d;
+      --node2:#0f1738;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 600px at 20% 10%, #1a2457 0%, rgba(26,36,87,0) 60%),
+                  radial-gradient(900px 500px at 80% 30%, #163a5a 0%, rgba(22,58,90,0) 55%),
+                  var(--bg);
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    header{
+      position:fixed;
+      top:0; left:0; right:0;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      background: linear-gradient(180deg, rgba(9,14,30,.9), rgba(9,14,30,.55));
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      z-index:20;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      min-width: 260px;
+    }
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background: linear-gradient(135deg, rgba(122,162,255,.9), rgba(122,255,194,.85));
+      box-shadow: var(--shadow);
+    }
+    .brand h1{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.2px;
+      font-weight:700;
+    }
+    .brand p{
+      margin:0;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    button, .ghost{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(17,24,51,.7);
+      color:var(--text);
+      padding:9px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:12px;
+      transition: transform .04s ease, background .15s ease, border-color .15s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    button:hover{
+      background: rgba(17,24,51,.95);
+      border-color: rgba(122,162,255,.45);
+    }
+    button:active{ transform: translateY(1px); }
+    button.primary{
+      background: rgba(122,162,255,.16);
+      border-color: rgba(122,162,255,.55);
+    }
+    button.danger{
+      background: rgba(255,107,122,.14);
+      border-color: rgba(255,107,122,.5);
+    }
+
+    .hint{
+      margin-left:auto;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .kbd{
+      font-family: var(--mono);
+      padding:3px 6px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      font-size:11px;
+    }
+
+    .wrap{
+      position:fixed;
+      inset:56px 0 0 0;
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:12px;
+      padding:12px;
+      z-index:1;
+    }
+
+    aside{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(17,24,51,.8), rgba(15,22,48,.7));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      overflow:auto;
+      padding:12px;
+    }
+
+    .panelTitle{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin:8px 0 8px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:12px;
+    }
+    label{
+      font-size:12px;
+      color:var(--muted);
+    }
+    input[type="text"], textarea{
+      width:100%;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 10px;
+      outline:none;
+      font-size:13px;
+    }
+    textarea{ min-height:90px; resize:vertical; }
+    input:focus, textarea:focus{
+      border-color: rgba(122,162,255,.6);
+      box-shadow: 0 0 0 3px rgba(122,162,255,.12);
+    }
+
+    .row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .stat{
+      padding:10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.07);
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .stat b{ color: var(--text); }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(17,24,51,.25), rgba(15,22,48,.22));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .canvas{
+      position:absolute;
+      inset:0;
+      cursor:grab;
+      user-select:none;
+    }
+    .canvas.grabbing{ cursor:grabbing; }
+
+    /* world = panned/zoomed container */
+    .world{
+      position:absolute;
+      left:0; top:0;
+      transform-origin: 0 0;
+      width: 5000px;
+      height: 4000px;
+    }
+
+    svg#links{
+      position:absolute;
+      inset:0;
+      overflow:visible;
+      pointer-events:none;
+    }
+
+    .node{
+      position:absolute;
+      width: 220px;
+      padding:10px 10px 9px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(18,27,61,.95), rgba(15,23,56,.92));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 25px rgba(0,0,0,.28);
+      cursor:pointer;
+      user-select:none;
+    }
+    .node:hover{
+      border-color: rgba(122,162,255,.45);
+    }
+    .node.selected{
+      border-color: rgba(122,255,194,.75);
+      box-shadow: 0 0 0 3px rgba(122,255,194,.18), 0 12px 28px rgba(0,0,0,.32);
+    }
+
+    .node .title{
+      font-weight:800;
+      font-size:13px;
+      line-height:1.25;
+      margin-bottom:6px;
+      word-break:break-word;
+    }
+    .node .meta{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      color:var(--muted);
+      font-size:11px;
+      font-family: var(--mono);
+    }
+
+    .badge{
+      padding:2px 7px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:16px;
+      transform: translateX(-50%);
+      padding:10px 12px;
+      border-radius: 14px;
+      background: rgba(9,14,30,.75);
+      border:1px solid rgba(255,255,255,.10);
+      color: var(--text);
+      font-size:12px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index:50;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.08);
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Logic Tree Builder</h1>
+        <p>Build issue trees / hypothesis trees fast</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="primary" id="btnAddChild">+ Child <span class="kbd">Enter</span></button>
+      <button id="btnAddSibling">+ Sibling <span class="kbd">Tab</span></button>
+      <button id="btnEdit">Edit <span class="kbd">E</span></button>
+      <button class="danger" id="btnDelete">Delete <span class="kbd">Del</span></button>
+      <button id="btnAuto">Auto layout</button>
+      <button id="btnCenter">Center view</button>
+      <button id="btnReset">Reset</button>
+    </div>
+
+    <div class="hint">
+      Pan: drag background • Zoom: mousewheel • Drag node: reposition
+    </div>
+  </header>
+
+  <div class="wrap">
+    <aside>
+      <div class="panelTitle">Selected node</div>
+
+      <div class="field">
+        <label>Title</label>
+        <input id="nodeTitle" type="text" placeholder="e.g., Why is delivery late?" />
+      </div>
+
+      <div class="field">
+        <label>Notes (optional)</label>
+        <textarea id="nodeNotes" placeholder="Evidence, assumptions, next test..."></textarea>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="btnSaveNode">Save</button>
+        <button id="btnClearManual">Clear manual position</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panelTitle">Tree</div>
+      <div class="row">
+        <button id="btnExport">Export JSON</button>
+        <button id="btnImport">Import JSON</button>
+      </div>
+      <div class="field">
+        <label>JSON</label>
+        <textarea id="jsonBox" placeholder="Export appears here. Paste JSON to import."></textarea>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panelTitle">How to use</div>
+      <div class="small">
+        <ul>
+          <li>Start from the root issue. Add children as causes / hypotheses.</li>
+          <li>Keep siblings MECE when possible (no overlaps, no gaps).</li>
+          <li>Use notes for evidence + what to test next.</li>
+          <li>If layout gets messy: click <b>Auto layout</b>.</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="stat"><span>Nodes</span><b id="statNodes">0</b></div>
+      <div class="stat"><span>Depth</span><b id="statDepth">0</b></div>
+      <div class="stat"><span>Autosave</span><b>ON</b></div>
+    </aside>
+
+    <main>
+      <div class="canvas" id="canvas">
+        <div class="world" id="world">
+          <svg id="links" width="5000" height="4000"></svg>
+          <!-- nodes injected here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /***********************
+     * Data Model
+     ***********************/
+    const STORAGE_KEY = "logic_tree_builder_v1";
+
+    // Node:
+    // { id, parentId, title, notes, children:[], x,y, manual:boolean }
+    let state = {
+      nodes: {},
+      rootId: null,
+      selectedId: null,
+      view: { x: 80, y: 80, scale: 1 }
+    };
+
+    const dom = {
+      world: document.getElementById("world"),
+      links: document.getElementById("links"),
+      canvas: document.getElementById("canvas"),
+      nodeTitle: document.getElementById("nodeTitle"),
+      nodeNotes: document.getElementById("nodeNotes"),
+      jsonBox: document.getElementById("jsonBox"),
+      toast: document.getElementById("toast"),
+      statNodes: document.getElementById("statNodes"),
+      statDepth: document.getElementById("statDepth"),
+    };
+
+    function uid(){
+      return Math.random().toString(36).slice(2,9) + "-" + Date.now().toString(36).slice(2,7);
+    }
+
+    function toast(msg){
+      dom.toast.textContent = msg;
+      dom.toast.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => dom.toast.classList.remove("show"), 1400);
+    }
+
+    function createInitial(){
+      const id = uid();
+      state.rootId = id;
+      state.selectedId = id;
+      state.nodes[id] = {
+        id,
+        parentId: null,
+        title: "Root issue (edit me)",
+        notes: "",
+        children: [],
+        x: 200, y: 140,
+        manual: false
+      };
+    }
+
+    function getNode(id){ return state.nodes[id] || null; }
+
+    function addChild(parentId){
+      const parent = getNode(parentId);
+      if(!parent) return;
+      const id = uid();
+      const n = {
+        id,
+        parentId,
+        title: "New node",
+        notes: "",
+        children: [],
+        x: parent.x + 300,
+        y: parent.y + (parent.children.length * 120),
+        manual: false
+      };
+      state.nodes[id] = n;
+      parent.children.push(id);
+      selectNode(id);
+      autoLayout(); // keep it readable by default
+      toast("Child added");
+      saveLocal();
+      render();
+    }
+
+    function addSibling(nodeId){
+      const node = getNode(nodeId);
+      if(!node) return;
+      if(!node.parentId){
+        toast("Root cannot have siblings");
+        return;
+      }
+      addChild(node.parentId);
+      toast("Sibling added");
+    }
+
+    function deleteNode(nodeId){
+      const node = getNode(nodeId);
+      if(!node) return;
+      if(nodeId === state.rootId){
+        toast("Cannot delete root");
+        return;
+      }
+      // remove from parent's children
+      const parent = getNode(node.parentId);
+      if(parent){
+        parent.children = parent.children.filter(cid => cid !== nodeId);
+      }
+      // delete subtree
+      const stack = [nodeId];
+      while(stack.length){
+        const id = stack.pop();
+        const cur = getNode(id);
+        if(!cur) continue;
+        stack.push(...cur.children);
+        delete state.nodes[id];
+      }
+      // select parent
+      selectNode(node.parentId || state.rootId);
+      toast("Node deleted");
+      saveLocal();
+      render();
+    }
+
+    function depthOf(id){
+      let d = 0;
+      let cur = getNode(id);
+      while(cur && cur.parentId){
+        d++;
+        cur = getNode(cur.parentId);
+      }
+      return d;
+    }
+
+    function computeTreeDepth(){
+      if(!state.rootId) return 0;
+      let maxD = 0;
+      const stack = [{ id: state.rootId, d: 0 }];
+      while(stack.length){
+        const {id, d} = stack.pop();
+        maxD = Math.max(maxD, d);
+        const n = getNode(id);
+        if(n) for(const c of n.children) stack.push({ id: c, d: d+1 });
+      }
+      return maxD;
+    }
+
+    /***********************
+     * Layout
+     * Simple tidy tree: compute y by leaf ordering, x by depth.
+     ***********************/
+    function autoLayout(){
+      if(!state.rootId) return;
+      const levelGap = 280;
+      const rowGap = 120;
+
+      // preserve manual nodes; only layout non-manual
+      // We'll compute target positions for non-manual nodes based on DFS leaf order.
+      let leafIndex = 0;
+      const yMap = new Map();
+
+      function dfsY(id){
+        const n = getNode(id);
+        if(!n) return 0;
+        if(n.children.length === 0){
+          const y = leafIndex * rowGap;
+          leafIndex++;
+          yMap.set(id, y);
+          return y;
+        }
+        const ys = n.children.map(dfsY);
+        const y = (Math.min(...ys) + Math.max(...ys)) / 2;
+        yMap.set(id, y);
+        return y;
+      }
+
+      dfsY(state.rootId);
+
+      // find top offset to keep near positive area
+      const ys = Array.from(yMap.values());
+      const minY = Math.min(...ys, 0);
+
+      // apply
+      for(const id of Object.keys(state.nodes)){
+        const n = getNode(id);
+        if(!n) continue;
+        if(n.manual) continue;
+        const d = depthOf(id);
+        n.x = 160 + d * levelGap;
+        n.y = 120 + (yMap.get(id) - minY);
+      }
+      saveLocal();
+      render();
+      toast("Auto layout");
+    }
+
+    /***********************
+     * View (pan/zoom)
+     ***********************/
+    function applyView(){
+      dom.world.style.transform = `translate(${state.view.x}px, ${state.view.y}px) scale(${state.view.scale})`;
+    }
+
+    function centerView(){
+      // center on selected node if possible
+      const n = getNode(state.selectedId || state.rootId);
+      if(!n) return;
+      const viewportW = dom.canvas.clientWidth;
+      const viewportH = dom.canvas.clientHeight;
+      const targetX = viewportW/2 - (n.x + 110) * state.view.scale; // node center approx
+      const targetY = viewportH/2 - (n.y + 40) * state.view.scale;
+      state.view.x = targetX;
+      state.view.y = targetY;
+      applyView();
+      saveLocal();
+      toast("Centered");
+    }
+
+    /***********************
+     * Rendering
+     ***********************/
+    function render(){
+      // clear nodes (but keep svg)
+      dom.world.querySelectorAll(".node").forEach(el => el.remove());
+      dom.links.innerHTML = "";
+
+      for(const id of Object.keys(state.nodes)){
+        const n = getNode(id);
+        if(!n) continue;
+
+        const el = document.createElement("div");
+        el.className = "node" + (id === state.selectedId ? " selected" : "");
+        el.style.left = n.x + "px";
+        el.style.top = n.y + "px";
+        el.dataset.id = id;
+
+        const d = depthOf(id);
+
+        el.innerHTML = `
+          <div class="title">${escapeHtml(n.title || "(untitled)")}</div>
+          <div class="meta">
+            <span class="badge">d:${d}</span>
+            <span class="badge">${n.manual ? "manual" : "auto"}</span>
+          </div>
+        `;
+
+        // select
+        el.addEventListener("mousedown", (e) => {
+          e.stopPropagation();
+          selectNode(id);
+          // start drag node
+          startNodeDrag(e, id);
+        });
+
+        dom.world.appendChild(el);
+      }
+
+      // links
+      drawLinks();
+
+      // stats
+      dom.statNodes.textContent = Object.keys(state.nodes).length.toString();
+      dom.statDepth.textContent = computeTreeDepth().toString();
+
+      // side panel binding
+      syncPanel();
+
+      applyView();
+    }
+
+    function drawLinks(){
+      const NS = "http://www.w3.org/2000/svg";
+
+      for(const id of Object.keys(state.nodes)){
+        const n = getNode(id);
+        if(!n) continue;
+        for(const cid of n.children){
+          const c = getNode(cid);
+          if(!c) continue;
+
+          const x1 = n.x + 220; // right edge
+          const y1 = n.y + 40;
+          const x2 = c.x;       // left edge
+          const y2 = c.y + 40;
+
+          const path = document.createElementNS(NS, "path");
+          const mid = (x1 + x2) / 2;
+
+          // cubic bezier for a clean curve
+          const d = `M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`;
+          path.setAttribute("d", d);
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "rgba(122,162,255,.35)");
+          path.setAttribute("stroke-width", "2");
+          path.setAttribute("stroke-linecap", "round");
+
+          dom.links.appendChild(path);
+        }
+      }
+    }
+
+    function escapeHtml(str){
+      return (str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /***********************
+     * Panel (edit selected node)
+     ***********************/
+    function syncPanel(){
+      const n = getNode(state.selectedId);
+      if(!n){
+        dom.nodeTitle.value = "";
+        dom.nodeNotes.value = "";
+        return;
+      }
+      dom.nodeTitle.value = n.title || "";
+      dom.nodeNotes.value = n.notes || "";
+    }
+
+    function saveSelectedFromPanel(){
+      const n = getNode(state.selectedId);
+      if(!n) return;
+      n.title = dom.nodeTitle.value.trim() || "Untitled";
+      n.notes = dom.nodeNotes.value;
+      saveLocal();
+      render();
+      toast("Saved");
+    }
+
+    function clearManualPos(){
+      const n = getNode(state.selectedId);
+      if(!n) return;
+      n.manual = false;
+      autoLayout();
+      toast("Manual cleared");
+    }
+
+    /***********************
+     * Dragging nodes (manual positioning)
+     ***********************/
+    let nodeDrag = null;
+
+    function startNodeDrag(e, id){
+      const n = getNode(id);
+      if(!n) return;
+
+      const start = screenToWorld(e.clientX, e.clientY);
+      nodeDrag = {
+        id,
+        startX: start.x,
+        startY: start.y,
+        origX: n.x,
+        origY: n.y,
+        moved: false
+      };
+
+      window.addEventListener("mousemove", onNodeDragMove);
+      window.addEventListener("mouseup", onNodeDragEnd, { once: true });
+    }
+
+    function onNodeDragMove(e){
+      if(!nodeDrag) return;
+      const n = getNode(nodeDrag.id);
+      if(!n) return;
+
+      const cur = screenToWorld(e.clientX, e.clientY);
+      const dx = cur.x - nodeDrag.startX;
+      const dy = cur.y - nodeDrag.startY;
+
+      if(Math.abs(dx) + Math.abs(dy) > 2) nodeDrag.moved = true;
+
+      n.x = nodeDrag.origX + dx;
+      n.y = nodeDrag.origY + dy;
+      n.manual = true;
+      render();
+    }
+
+    function onNodeDragEnd(){
+      if(nodeDrag?.moved) saveLocal();
+      window.removeEventListener("mousemove", onNodeDragMove);
+      nodeDrag = null;
+    }
+
+    /***********************
+     * Canvas pan/zoom
+     ***********************/
+    let pan = null;
+
+    dom.canvas.addEventListener("mousedown", (e) => {
+      // clicking background
+      if(e.button !== 0) return;
+      if(e.target.closest(".node")) return; // node handles its own
+      pan = { startX: e.clientX, startY: e.clientY, origX: state.view.x, origY: state.view.y };
+      dom.canvas.classList.add("grabbing");
+      window.addEventListener("mousemove", onPanMove);
+      window.addEventListener("mouseup", onPanEnd, { once: true });
+    });
+
+    function onPanMove(e){
+      if(!pan) return;
+      const dx = e.clientX - pan.startX;
+      const dy = e.clientY - pan.startY;
+      state.view.x = pan.origX + dx;
+      state.view.y = pan.origY + dy;
+      applyView();
+    }
+
+    function onPanEnd(){
+      dom.canvas.classList.remove("grabbing");
+      window.removeEventListener("mousemove", onPanMove);
+      pan = null;
+      saveLocal();
+    }
+
+    dom.canvas.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const delta = -Math.sign(e.deltaY) * 0.08;
+
+      const oldScale = state.view.scale;
+      const newScale = clamp(oldScale * (1 + delta), 0.35, 2.2);
+
+      // zoom around mouse cursor
+      const rect = dom.canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      const wx = (mx - state.view.x) / oldScale;
+      const wy = (my - state.view.y) / oldScale;
+
+      state.view.scale = newScale;
+      state.view.x = mx - wx * newScale;
+      state.view.y = my - wy * newScale;
+
+      applyView();
+      saveLocal();
+    }, { passive:false });
+
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+    function screenToWorld(clientX, clientY){
+      const rect = dom.canvas.getBoundingClientRect();
+      const sx = clientX - rect.left;
+      const sy = clientY - rect.top;
+      return {
+        x: (sx - state.view.x) / state.view.scale,
+        y: (sy - state.view.y) / state.view.scale
+      };
+    }
+
+    /***********************
+     * Selection & keyboard shortcuts
+     ***********************/
+    function selectNode(id){
+      if(!getNode(id)) return;
+      state.selectedId = id;
+      saveLocal();
+      render();
+    }
+
+    function editSelected(){
+      const n = getNode(state.selectedId);
+      if(!n) return;
+      const text = prompt("Edit node title:", n.title || "");
+      if(text === null) return;
+      n.title = text.trim() || "Untitled";
+      saveLocal();
+      render();
+      toast("Edited");
+    }
+
+    window.addEventListener("keydown", (e) => {
+      // avoid hijacking when typing in inputs
+      const tag = document.activeElement?.tagName?.toLowerCase();
+      const typing = tag === "input" || tag === "textarea";
+      if(typing) return;
+
+      if(e.key === "Enter"){
+        e.preventDefault();
+        addChild(state.selectedId);
+      } else if(e.key === "Tab"){
+        e.preventDefault();
+        addSibling(state.selectedId);
+      } else if(e.key.toLowerCase() === "e"){
+        e.preventDefault();
+        editSelected();
+      } else if(e.key === "Delete" || e.key === "Backspace"){
+        e.preventDefault();
+        deleteNode(state.selectedId);
+      }
+    });
+
+    /***********************
+     * Export / Import
+     ***********************/
+    function exportJSON(){
+      const payload = {
+        version: 1,
+        rootId: state.rootId,
+        selectedId: state.selectedId,
+        view: state.view,
+        nodes: state.nodes
+      };
+      dom.jsonBox.value = JSON.stringify(payload, null, 2);
+      dom.jsonBox.focus();
+      dom.jsonBox.select();
+      toast("Exported");
+    }
+
+    function importJSON(){
+      const txt = dom.jsonBox.value.trim();
+      if(!txt){
+        toast("Paste JSON first");
+        return;
+      }
+      try{
+        const obj = JSON.parse(txt);
+        if(!obj || !obj.nodes || !obj.rootId) throw new Error("Invalid format");
+        state = {
+          nodes: obj.nodes,
+          rootId: obj.rootId,
+          selectedId: obj.selectedId || obj.rootId,
+          view: obj.view || { x: 80, y: 80, scale: 1 }
+        };
+        saveLocal();
+        render();
+        toast("Imported");
+      }catch(err){
+        console.error(err);
+        toast("Import failed (invalid JSON)");
+      }
+    }
+
+    /***********************
+     * Persistence
+     ***********************/
+    function saveLocal(){
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }catch(e){
+        // ignore
+      }
+    }
+
+    function loadLocal(){
+      try{
+        const txt = localStorage.getItem(STORAGE_KEY);
+        if(!txt) return false;
+        const obj = JSON.parse(txt);
+        if(!obj || !obj.nodes || !obj.rootId) return false;
+        state = obj;
+        return true;
+      }catch(e){
+        return false;
+      }
+    }
+
+    function resetAll(){
+      localStorage.removeItem(STORAGE_KEY);
+      state = { nodes:{}, rootId:null, selectedId:null, view:{x:80,y:80,scale:1} };
+      createInitial();
+      autoLayout();
+      centerView();
+      saveLocal();
+      render();
+      toast("Reset");
+    }
+
+    /***********************
+     * Wire UI buttons
+     ***********************/
+    document.getElementById("btnAddChild").addEventListener("click", () => addChild(state.selectedId));
+    document.getElementById("btnAddSibling").addEventListener("click", () => addSibling(state.selectedId));
+    document.getElementById("btnEdit").addEventListener("click", editSelected);
+    document.getElementById("btnDelete").addEventListener("click", () => deleteNode(state.selectedId));
+    document.getElementById("btnAuto").addEventListener("click", autoLayout);
+    document.getElementById("btnCenter").addEventListener("click", centerView);
+    document.getElementById("btnReset").addEventListener("click", resetAll);
+
+    document.getElementById("btnSaveNode").addEventListener("click", saveSelectedFromPanel);
+    document.getElementById("btnClearManual").addEventListener("click", clearManualPos);
+
+    document.getElementById("btnExport").addEventListener("click", exportJSON);
+    document.getElementById("btnImport").addEventListener("click", importJSON);
+
+    dom.nodeTitle.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        saveSelectedFromPanel();
+      }
+    });
+
+    /***********************
+     * Init
+     ***********************/
+    if(!loadLocal()){
+      createInitial();
+      autoLayout();
+      saveLocal();
+    }
+    render();
+    centerView();
+  </script>
+</body>
+</html>
