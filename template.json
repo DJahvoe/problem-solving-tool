@@ -1,0 +1,384 @@
+{
+  "version": 1,
+  "rootId": "qkvgzz4-9bmk8",
+  "selectedId": "7ebd258-9fyvy",
+  "view": {
+    "x": -46.638801822951905,
+    "y": 59.84415586316959,
+    "scale": 0.516436031157452
+  },
+  "nodes": {
+    "qkvgzz4-9bmk8": {
+      "id": "qkvgzz4-9bmk8",
+      "parentId": null,
+      "title": "Problem (Gap)",
+      "notes": "Current Situation:\nIdeal Situation:",
+      "children": [
+        "gz6n58l-9c32f",
+        "8jy7rp4-9ck47",
+        "6g95ayw-9ck4d"
+      ],
+      "x": 160,
+      "y": 1485,
+      "manual": false,
+      "color": "#aa3131"
+    },
+    "gz6n58l-9c32f": {
+      "id": "gz6n58l-9c32f",
+      "parentId": "qkvgzz4-9bmk8",
+      "title": "Problem Spot 1",
+      "notes": "",
+      "children": [
+        "i4az08c-9cnrd",
+        "ttxlhrd-9cnry",
+        "6xoa8hm-9cns4"
+      ],
+      "x": 440,
+      "y": 930,
+      "manual": false,
+      "color": "#aa3131"
+    },
+    "8jy7rp4-9ck47": {
+      "id": "8jy7rp4-9ck47",
+      "parentId": "qkvgzz4-9bmk8",
+      "title": "Problem Spot 2",
+      "notes": "",
+      "children": [],
+      "x": 440,
+      "y": 1920,
+      "manual": false,
+      "color": "#340404"
+    },
+    "6g95ayw-9ck4d": {
+      "id": "6g95ayw-9ck4d",
+      "parentId": "qkvgzz4-9bmk8",
+      "title": "Problem Spot 3",
+      "notes": "",
+      "children": [],
+      "x": 440,
+      "y": 2040,
+      "manual": false,
+      "color": "#340404"
+    },
+    "i4az08c-9cnrd": {
+      "id": "i4az08c-9cnrd",
+      "parentId": "gz6n58l-9c32f",
+      "title": "Cause 1",
+      "notes": "",
+      "children": [],
+      "x": 720,
+      "y": 120,
+      "manual": false,
+      "color": "#2c1a02"
+    },
+    "ttxlhrd-9cnry": {
+      "id": "ttxlhrd-9cnry",
+      "parentId": "gz6n58l-9c32f",
+      "title": "Cause 2",
+      "notes": "",
+      "children": [
+        "8wz51cz-9fuwc",
+        "xypzqq9-9fuyf",
+        "il82okn-9fuyr"
+      ],
+      "x": 720,
+      "y": 900,
+      "manual": false,
+      "color": "#a46813"
+    },
+    "6xoa8hm-9cns4": {
+      "id": "6xoa8hm-9cns4",
+      "parentId": "gz6n58l-9c32f",
+      "title": "Cause 3",
+      "notes": "",
+      "children": [
+        "i2ho8e2-9fvqs",
+        "jqj0pem-9fvsu"
+      ],
+      "x": 720,
+      "y": 1740,
+      "manual": false,
+      "color": "#a46813"
+    },
+    "8wz51cz-9fuwc": {
+      "id": "8wz51cz-9fuwc",
+      "parentId": "ttxlhrd-9cnry",
+      "title": "Cause 2-1",
+      "notes": "",
+      "color": "#2c1a02",
+      "children": [],
+      "x": 1000,
+      "y": 240,
+      "manual": false
+    },
+    "xypzqq9-9fuyf": {
+      "id": "xypzqq9-9fuyf",
+      "parentId": "ttxlhrd-9cnry",
+      "title": "Cause 2-2",
+      "notes": "",
+      "color": "#a46813",
+      "children": [
+        "d16oa8r-9fygo"
+      ],
+      "x": 1000,
+      "y": 690,
+      "manual": false
+    },
+    "il82okn-9fuyr": {
+      "id": "il82okn-9fuyr",
+      "parentId": "ttxlhrd-9cnry",
+      "title": "Cause 2-3",
+      "notes": "",
+      "color": "#2c1a02",
+      "children": [],
+      "x": 1000,
+      "y": 1560,
+      "manual": false
+    },
+    "i2ho8e2-9fvqs": {
+      "id": "i2ho8e2-9fvqs",
+      "parentId": "6xoa8hm-9cns4",
+      "title": "Cause 3-1",
+      "notes": "",
+      "color": "#a46813",
+      "children": [
+        "7ebd258-9fyvy"
+      ],
+      "x": 1000,
+      "y": 1680,
+      "manual": false
+    },
+    "jqj0pem-9fvsu": {
+      "id": "jqj0pem-9fvsu",
+      "parentId": "6xoa8hm-9cns4",
+      "title": "Cause 3-2",
+      "notes": "",
+      "color": "#2c1a02",
+      "children": [],
+      "x": 1000,
+      "y": 1800,
+      "manual": false
+    },
+    "d16oa8r-9fygo": {
+      "id": "d16oa8r-9fygo",
+      "parentId": "xypzqq9-9fuyf",
+      "title": "Root Cause Combined",
+      "notes": "",
+      "color": "#a46813",
+      "children": [
+        "965imju-9g161",
+        "begu0r0-9g87q",
+        "2x9s2yt-9g87x"
+      ],
+      "x": 1280,
+      "y": 690,
+      "manual": false
+    },
+    "7ebd258-9fyvy": {
+      "id": "7ebd258-9fyvy",
+      "parentId": "i2ho8e2-9fvqs",
+      "title": "Root Cause Combined",
+      "notes": "",
+      "color": "#a46813",
+      "children": [],
+      "x": 1281.6822546376172,
+      "y": 689.1520184434463,
+      "manual": true
+    },
+    "965imju-9g161": {
+      "id": "965imju-9g161",
+      "parentId": "d16oa8r-9fygo",
+      "title": "Solution 1",
+      "notes": "",
+      "color": "#073240",
+      "children": [],
+      "x": 1560,
+      "y": 360,
+      "manual": false
+    },
+    "begu0r0-9g87q": {
+      "id": "begu0r0-9g87q",
+      "parentId": "d16oa8r-9fygo",
+      "title": "Solution 2",
+      "notes": "",
+      "color": "#073240",
+      "children": [],
+      "x": 1560,
+      "y": 480,
+      "manual": false
+    },
+    "2x9s2yt-9g87x": {
+      "id": "2x9s2yt-9g87x",
+      "parentId": "d16oa8r-9fygo",
+      "title": "Solution 3",
+      "notes": "",
+      "color": "#0d779b",
+      "children": [
+        "77s682k-9gare",
+        "ok2iz74-9gb81",
+        "jwkfn1l-9gb8a"
+      ],
+      "x": 1560,
+      "y": 1020,
+      "manual": false
+    },
+    "77s682k-9gare": {
+      "id": "77s682k-9gare",
+      "parentId": "2x9s2yt-9g87x",
+      "title": "Solution 3-1",
+      "notes": "",
+      "color": "#073240",
+      "children": [],
+      "x": 1840,
+      "y": 600,
+      "manual": false
+    },
+    "ok2iz74-9gb81": {
+      "id": "ok2iz74-9gb81",
+      "parentId": "2x9s2yt-9g87x",
+      "title": "Solution 3-2",
+      "notes": "",
+      "color": "#0d779b",
+      "children": [
+        "b7dnikc-9gcp0"
+      ],
+      "x": 1840,
+      "y": 960,
+      "manual": false
+    },
+    "jwkfn1l-9gb8a": {
+      "id": "jwkfn1l-9gb8a",
+      "parentId": "2x9s2yt-9g87x",
+      "title": "Solution 3-3",
+      "notes": "",
+      "color": "#0d779b",
+      "children": [
+        "5xefijw-9gd1y"
+      ],
+      "x": 1840,
+      "y": 1440,
+      "manual": false
+    },
+    "b7dnikc-9gcp0": {
+      "id": "b7dnikc-9gcp0",
+      "parentId": "ok2iz74-9gb81",
+      "title": "Policy/Measure Combined",
+      "notes": "",
+      "color": "#0d779b",
+      "children": [
+        "voas40w-9ge4c",
+        "el4843j-9gecj"
+      ],
+      "x": 2120,
+      "y": 960,
+      "manual": false
+    },
+    "5xefijw-9gd1y": {
+      "id": "5xefijw-9gd1y",
+      "parentId": "jwkfn1l-9gb8a",
+      "title": "Policy/Measure Combined",
+      "notes": "",
+      "color": "#0d779b",
+      "children": [],
+      "x": 2119.1588726811915,
+      "y": 958.8751736414696,
+      "manual": true
+    },
+    "voas40w-9ge4c": {
+      "id": "voas40w-9ge4c",
+      "parentId": "b7dnikc-9gcp0",
+      "title": "Target",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [
+        "dbtej3u-9ggls",
+        "hr8r1zu-9gh42"
+      ],
+      "x": 2400,
+      "y": 780,
+      "manual": false
+    },
+    "el4843j-9gecj": {
+      "id": "el4843j-9gecj",
+      "parentId": "b7dnikc-9gcp0",
+      "title": "Plan",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [
+        "a7ai5u4-9gi13",
+        "ugy8mpj-9gi1w",
+        "zd4s23d-9gi24",
+        "dsqvcy8-9gi2k"
+      ],
+      "x": 2400,
+      "y": 1140,
+      "manual": false
+    },
+    "dbtej3u-9ggls": {
+      "id": "dbtej3u-9ggls",
+      "parentId": "voas40w-9ge4c",
+      "title": "Timeframe (Time Limit)",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [],
+      "x": 2680,
+      "y": 720,
+      "manual": false
+    },
+    "hr8r1zu-9gh42": {
+      "id": "hr8r1zu-9gh42",
+      "parentId": "voas40w-9ge4c",
+      "title": "Figure (Numerical Value)",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [],
+      "x": 2680,
+      "y": 840,
+      "manual": false
+    },
+    "a7ai5u4-9gi13": {
+      "id": "a7ai5u4-9gi13",
+      "parentId": "el4843j-9gecj",
+      "title": "Schedule",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [],
+      "x": 2680,
+      "y": 960,
+      "manual": false
+    },
+    "ugy8mpj-9gi1w": {
+      "id": "ugy8mpj-9gi1w",
+      "parentId": "el4843j-9gecj",
+      "title": "Organization",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [],
+      "x": 2680,
+      "y": 1080,
+      "manual": false
+    },
+    "zd4s23d-9gi24": {
+      "id": "zd4s23d-9gi24",
+      "parentId": "el4843j-9gecj",
+      "title": "Budget/Estimates",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [],
+      "x": 2680,
+      "y": 1200,
+      "manual": false
+    },
+    "dsqvcy8-9gi2k": {
+      "id": "dsqvcy8-9gi2k",
+      "parentId": "el4843j-9gecj",
+      "title": "Risk",
+      "notes": "",
+      "color": "#a62bb6",
+      "children": [],
+      "x": 2680,
+      "y": 1320,
+      "manual": false
+    }
+  }
+}
