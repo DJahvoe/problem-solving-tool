@@ -306,129 +306,47 @@ if (dom.btnPanel) {
   });
 }
 
-// ===============================
-// Touch Pan + Pinch Zoom (Mobile)
-// ===============================
-let pinch = null;
-
-function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
-
-function distance(a,b){
-  const dx = a.clientX - b.clientX;
-  const dy = a.clientY - b.clientY;
-  return Math.hypot(dx, dy);
-}
-
-function midpoint(a,b){
-  return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 };
-}
-
-function zoomAtClientPoint(newScale, clientX, clientY){
-  const oldScale = state.view.scale;
-  const scale = clamp(newScale, 0.35, 2.2);
-  if(scale === oldScale) return;
-
-  const rect = dom.canvas.getBoundingClientRect();
-  const mx = clientX - rect.left;
-  const my = clientY - rect.top;
-
-  // world coords under finger BEFORE zoom
-  const wx = (mx - state.view.x) / oldScale;
-  const wy = (my - state.view.y) / oldScale;
-
-  state.view.scale = scale;
-  state.view.x = mx - wx * scale;
-  state.view.y = my - wy * scale;
-
-  applyView();
-}
-
+// --- Touch support (mobile) ---
+// One-finger: pan (background), drag (node)
 dom.canvas.addEventListener("touchstart", (e) => {
-  // Must be non-passive to prevent browser zoom/scroll
-  e.preventDefault();
+  if(e.touches.length !== 1) return;
+  const t = e.touches[0];
+  const onNode = e.target.closest && e.target.closest(".node");
 
-  // 2 fingers => start pinch
-  if(e.touches.length === 2){
-    // cancel pan/nodeDrag if running
-    pan = null;
-    if(nodeDrag) onNodeDragEnd();
-
-    const a = e.touches[0];
-    const b = e.touches[1];
-    pinch = {
-      startDist: distance(a,b),
-      startScale: state.view.scale,
-    };
+  if(onNode){
+    // Let node mousedown logic handle selection; start drag manually:
+    const id = onNode.dataset.id;
+    if(id){
+      e.preventDefault();
+      selectNode(id);
+      startNodeDrag({ clientX: t.clientX, clientY: t.clientY, stopPropagation: ()=>{} }, id);
+    }
     return;
   }
 
-  // 1 finger
-  if(e.touches.length === 1){
-    const t = e.touches[0];
-    const onNode = e.target.closest && e.target.closest(".node");
-
-    // Drag node if touch starts on node
-    if(onNode){
-      const id = onNode.dataset.id;
-      if(id){
-        selectNode(id);
-        startNodeDrag({ clientX: t.clientX, clientY: t.clientY, stopPropagation: ()=>{} }, id);
-      }
-      return;
-    }
-
-    // Otherwise pan background
-    pan = { startX: t.clientX, startY: t.clientY, origX: state.view.x, origY: state.view.y };
-    dom.canvas.classList.add("grabbing");
-  }
+  // Pan background
+  pan = { startX: t.clientX, startY: t.clientY, origX: state.view.x, origY: state.view.y };
+  dom.canvas.classList.add("grabbing");
 }, { passive:false });
 
 dom.canvas.addEventListener("touchmove", (e) => {
-  e.preventDefault();
+  if(e.touches.length !== 1) return;
+  const t = e.touches[0];
 
-  // Pinch zoom
-  if(e.touches.length === 2 && pinch){
-    const a = e.touches[0];
-    const b = e.touches[1];
-
-    const d = distance(a,b);
-    const ratio = d / pinch.startDist;
-    const targetScale = pinch.startScale * ratio;
-
-    const mid = midpoint(a,b);
-    zoomAtClientPoint(targetScale, mid.x, mid.y);
-
-    return;
-  }
-
-  // Drag node
-  if(e.touches.length === 1 && nodeDrag){
-    const t = e.touches[0];
+  // Node drag
+  if(nodeDrag){
+    e.preventDefault();
     onNodeDragMove({ clientX: t.clientX, clientY: t.clientY });
     return;
   }
 
   // Pan
-  if(e.touches.length === 1 && pan){
-    const t = e.touches[0];
-    const dx = t.clientX - pan.startX;
-    const dy = t.clientY - pan.startY;
-    state.view.x = pan.origX + dx;
-    state.view.y = pan.origY + dy;
-    applyView();
-    return;
-  }
+  if(!pan) return;
+  e.preventDefault();
+  onPanMove({ clientX: t.clientX, clientY: t.clientY });
 }, { passive:false });
 
 dom.canvas.addEventListener("touchend", (_e) => {
-  if(pinch){
-    pinch = null;
-    saveLocal();
-  }
   if(nodeDrag) onNodeDragEnd();
-  if(pan){
-    dom.canvas.classList.remove("grabbing");
-    pan = null;
-    saveLocal();
-  }
-}, { passive:false });
+  if(pan) onPanEnd();
+});

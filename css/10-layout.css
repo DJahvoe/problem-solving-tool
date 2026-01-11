@@ -40,9 +40,6 @@ main{
 }
 
 .canvas{
-  touch-action: none;     /* blocks browser pan/zoom on this element */
-  overscroll-behavior: none;
-
   position:absolute;
   inset:0;
   cursor:grab;
