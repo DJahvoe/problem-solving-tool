@@ -1,0 +1,63 @@
+header{
+  position:fixed;
+  top:0; left:0; right:0;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background: linear-gradient(180deg, rgba(9,14,30,.9), rgba(9,14,30,.55));
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  z-index:20;
+}
+
+.wrap{
+  position:fixed;
+  inset:56px 0 0 0;
+  display:grid;
+  grid-template-columns: 340px 1fr;
+  gap:12px;
+  padding:12px;
+  z-index:1;
+}
+
+aside{
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(17,24,51,.8), rgba(15,22,48,.7));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow: var(--shadow);
+  overflow:auto;
+  padding:12px;
+}
+
+main{
+  position:relative;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(17,24,51,.25), rgba(15,22,48,.22));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.canvas{
+  position:absolute;
+  inset:0;
+  cursor:grab;
+  user-select:none;
+}
+.canvas.grabbing{ cursor:grabbing; }
+
+.world{
+  position:absolute;
+  left:0; top:0;
+  transform-origin: 0 0;
+  width: 5000px;
+  height: 4000px;
+}
+
+svg#links{
+  position:absolute;
+  inset:0;
+  overflow:visible;
+  pointer-events:none;
+}

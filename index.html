@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Logic Tree Builder</title>
+
+  <!-- CSS (split from your <style>) -->
+  <link rel="stylesheet" href="css/00-vars.css" />
+  <link rel="stylesheet" href="css/10-layout.css" />
+  <link rel="stylesheet" href="css/20-components.css" />
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Logic Tree Builder</h1>
+        <p>Build issue trees / hypothesis trees fast</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="primary" id="btnAddChild">+ Child <span class="kbd">Enter</span></button>
+      <button id="btnAddSibling">+ Sibling <span class="kbd">Tab</span></button>
+      <button id="btnEdit">Edit <span class="kbd">E</span></button>
+      <button class="danger" id="btnDelete">Delete <span class="kbd">Del</span></button>
+      <button id="btnAuto">Auto layout</button>
+      <button id="btnCenter">Center view</button>
+      <button id="btnReset">Reset</button>
+    </div>
+
+    <div class="hint">
+      Pan: drag background • Zoom: mousewheel • Drag node: reposition
+    </div>
+  </header>
+
+  <div class="wrap">
+    <aside>
+      <div class="panelTitle">Selected node</div>
+
+      <div class="field">
+        <label>Title</label>
+        <input id="nodeTitle" type="text" placeholder="e.g., Why is delivery late?" />
+      </div>
+
+      <div class="field">
+        <label>Notes (optional)</label>
+        <textarea id="nodeNotes" placeholder="Evidence, assumptions, next test..."></textarea>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="btnSaveNode">Save</button>
+        <button id="btnClearManual">Clear manual position</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panelTitle">Tree</div>
+      <div class="row">
+        <button id="btnExport">Export JSON</button>
+        <button id="btnImport">Import JSON</button>
+      </div>
+      <div class="field">
+        <label>JSON</label>
+        <textarea id="jsonBox" placeholder="Export appears here. Paste JSON to import."></textarea>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panelTitle">How to use</div>
+      <div class="small">
+        <ul>
+          <li>Start from the root issue. Add children as causes / hypotheses.</li>
+          <li>Keep siblings MECE when possible (no overlaps, no gaps).</li>
+          <li>Use notes for evidence + what to test next.</li>
+          <li>If layout gets messy: click <b>Auto layout</b>.</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="stat"><span>Nodes</span><b id="statNodes">0</b></div>
+      <div class="stat"><span>Depth</span><b id="statDepth">0</b></div>
+      <div class="stat"><span>Autosave</span><b>ON</b></div>
+    </aside>
+
+    <main>
+      <div class="canvas" id="canvas">
+        <div class="world" id="world">
+          <svg id="links" width="5000" height="4000"></svg>
+          <!-- nodes injected here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- JS (split from your <script>) -->
+  <script src="js/00-dom.js"></script>
+  <script src="js/10-state.js"></script>
+  <script src="js/20-utils.js"></script>
+  <script src="js/30-layout.js"></script>
+  <script src="js/40-render.js"></script>
+  <script src="js/50-interactions.js"></script>
+  <script src="js/_app.js"></script>
+</body>
+</html>
