@@ -247,3 +247,55 @@ window.addEventListener("keydown", (e) => {
     deleteNode(state.selectedId);
   }
 });
+
+// Mobile: toggle panel bottom sheet
+if (dom.btnPanel) {
+  dom.btnPanel.addEventListener("click", () => {
+    document.body.classList.toggle("panel-open");
+  });
+}
+
+// --- Touch support (mobile) ---
+// One-finger: pan (background), drag (node)
+dom.canvas.addEventListener("touchstart", (e) => {
+  if(e.touches.length !== 1) return;
+  const t = e.touches[0];
+  const onNode = e.target.closest && e.target.closest(".node");
+
+  if(onNode){
+    // Let node mousedown logic handle selection; start drag manually:
+    const id = onNode.dataset.id;
+    if(id){
+      e.preventDefault();
+      selectNode(id);
+      startNodeDrag({ clientX: t.clientX, clientY: t.clientY, stopPropagation: ()=>{} }, id);
+    }
+    return;
+  }
+
+  // Pan background
+  pan = { startX: t.clientX, startY: t.clientY, origX: state.view.x, origY: state.view.y };
+  dom.canvas.classList.add("grabbing");
+}, { passive:false });
+
+dom.canvas.addEventListener("touchmove", (e) => {
+  if(e.touches.length !== 1) return;
+  const t = e.touches[0];
+
+  // Node drag
+  if(nodeDrag){
+    e.preventDefault();
+    onNodeDragMove({ clientX: t.clientX, clientY: t.clientY });
+    return;
+  }
+
+  // Pan
+  if(!pan) return;
+  e.preventDefault();
+  onPanMove({ clientX: t.clientX, clientY: t.clientY });
+}, { passive:false });
+
+dom.canvas.addEventListener("touchend", (_e) => {
+  if(nodeDrag) onNodeDragEnd();
+  if(pan) onPanEnd();
+});

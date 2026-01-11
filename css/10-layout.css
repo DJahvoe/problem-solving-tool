@@ -61,3 +61,44 @@ svg#links{
   overflow:visible;
   pointer-events:none;
 }
+
+/* Mobile layout: main full screen, aside becomes bottom sheet */
+@media (max-width: 900px){
+  .wrap{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    padding: 8px;
+  }
+
+  aside{
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    top: auto;
+    max-height: 46vh;
+    z-index: 30;
+    border-radius: 18px;
+    transform: translateY(calc(100% + 12px));
+    transition: transform .18s ease;
+  }
+
+  body.panel-open aside{
+    transform: translateY(0);
+  }
+
+  main{
+    height: calc(100vh - 56px - 16px);
+  }
+
+  header{
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .hint{
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+}

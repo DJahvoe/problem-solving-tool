@@ -21,4 +21,5 @@ const dom = {
   btnClearManual: document.getElementById("btnClearManual"),
   btnExport: document.getElementById("btnExport"),
   btnImport: document.getElementById("btnImport"),
+  btnPanel: document.getElementById("btnPanel"),
 };
