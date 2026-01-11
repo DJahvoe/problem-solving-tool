@@ -89,19 +89,19 @@ function editSelected(){
 
 function saveSelectedFromPanel(){
   const n = getNode(state.selectedId);
-  let oldTitleEl = n.title;
-  let oldNotesEl = n.notes;
+  let oldTitle = n.title;
+  let oldNotes = n.notes;
   console.log(n);
   if(!n) return;
 
   // Desktop vs Mobile inputs (use whichever exists)
   let titleEl = null;
-  if(oldTitleEl !== dom.mNodeTitle) titleEl = dom.mNodeTitle;
-  if(oldTitleEl !== dom.nodeTitle) titleEl = dom.nodeTitle;
+  if(oldTitle !== dom.mNodeTitle?.value) titleEl = dom.mNodeTitle;
+  if(oldTitle !== dom.nodeTitle?.value) titleEl = dom.nodeTitle;
 
   let notesEl = null;
-  if(oldNotesEl !== dom.mNodeNotes) notesEl = dom.mNodeNotes;
-  if(oldNotesEl !== dom.nodeNotes) notesEl = dom.nodeNotes;
+  if(oldNotes !== dom.mNodeNotes?.value) notesEl = dom.mNodeNotes;
+  if(oldNotes !== dom.nodeNotes?.value) notesEl = dom.nodeNotes;
 
   // Color inputs
   const colorEl = dom.mNodeColor || dom.nodeColor;
