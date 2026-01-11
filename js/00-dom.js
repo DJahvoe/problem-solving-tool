@@ -24,8 +24,8 @@ const dom = {
     btnPanel: document.getElementById("btnPanel"),
 
     // mobile UI
-    mAdd: document.getElementById("mAdd"),
-    mEdit: document.getElementById("mEdit"),
+    mAddChild: document.getElementById("mAddChild"),
+    mAddSibling: document.getElementById("mAddSibling"),
     mAuto: document.getElementById("mAuto"),
     mPanel: document.getElementById("mPanel"),
 

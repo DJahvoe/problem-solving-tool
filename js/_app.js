@@ -37,6 +37,9 @@ function importJSON(){
 }
 
 function resetAll(){
+  if(!confirm("Delete all nodes?")) return;
+
+  
   localStorage.removeItem(STORAGE_KEY);
   state = { nodes:{}, rootId:null, selectedId:null, view:{x:80,y:80,scale:1} };
   createInitial();
@@ -45,6 +48,10 @@ function resetAll(){
   saveLocal();
   render();
   toast("Reset");
+}
+
+function closePanel() {
+    document.body.classList.remove("panel-open");
 }
 
 /***********************
@@ -73,13 +80,19 @@ dom.nodeTitle.addEventListener("keydown", (e) => {
 });
 
 // Mobile wiring (safe-guard: elements exist only on mobile UI)
-if(dom.mAdd) dom.mAdd.addEventListener("click", () => addChild(state.selectedId));
-if(dom.mEdit) dom.mEdit.addEventListener("click", editSelected);
+if(dom.mAddChild) dom.mAddChild.addEventListener("click", () => addChild(state.selectedId));
+if(dom.mAddSibling) dom.mAddSibling.addEventListener("click", () => addSibling(state.selectedId));
 if(dom.mAuto) dom.mAuto.addEventListener("click", autoLayout);
 if(dom.mCenter) dom.mCenter.addEventListener("click", centerView);
-if(dom.mDelete) dom.mDelete.addEventListener("click", () => deleteNode(state.selectedId));
+if(dom.mDelete) dom.mDelete.addEventListener("click", () => {
+    deleteNode(state.selectedId);
+    closePanel();
+});
 
-if(dom.mSave) dom.mSave.addEventListener("click", saveSelectedFromPanel);
+if(dom.mSave) dom.mSave.addEventListener("click", () => {
+    saveSelectedFromPanel();
+    closePanel();
+});
 
 if(dom.mPanel) dom.mPanel.addEventListener("click", () => {
   document.body.classList.toggle("panel-open");

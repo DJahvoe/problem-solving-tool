@@ -46,6 +46,8 @@ function addSibling(nodeId){
 }
 
 function deleteNode(nodeId){
+  if(!confirm("Delete Node?")) return;
+  
   const node = getNode(nodeId);
   if(!node) return;
   if(nodeId === state.rootId){
